@@ -28,8 +28,20 @@ public class MapDataManager {
 		waypoints.add(w);
 	}
 
+	public boolean removeElement(MapElement e) {
+		if(e instanceof(Waypoint)) {
+			return removeWaypoint((Waypoint) e);
+		} else {
+			return removeLeg((Leg) e);
+		}
+	}
+
+	public boolean removeLeg(Leg l) {
+		return legs.remove(l);
+	}
+
 	public boolean removeWaypoint(Waypoint w) {
-		waypoints.remove(w);
+		return waypoints.remove(w);
 	}
 
 	public MapElement getElement(Position p) {
