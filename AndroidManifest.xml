@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rt"
     android:versionCode="1"
@@ -12,6 +13,22 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.rt.ui.MenuActivity"
+            android:label="@string/main_title" >
+        </activity>
+        <activity
+            android:name="com.rt.ui.Statistics"
+            android:label="@string/title_activity_statistics" >
+        </activity>
+        <activity
+            android:name="com.rt.ui.StatisticsActivity"
+            android:label="@string/title_activity_statistics" >
+        </activity>
+        <activity
+            android:name="com.rt.ui.HelpActivity"
+            android:label="@string/title_activity_help" >
+        </activity>
     </application>
 
 </manifest>
