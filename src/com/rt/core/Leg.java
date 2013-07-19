@@ -19,7 +19,7 @@ public class Leg extends MapElement{
 	}
 
 	public Leg(Waypoint wayA, Waypoint wayB, ArrayList<Position> points) {
-		super(points.at(points.size()/2));
+		super(points.get(points.size()/2));
 
 		this.wayA = wayA;
 		this.wayB = wayB;
