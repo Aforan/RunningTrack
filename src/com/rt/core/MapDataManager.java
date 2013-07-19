@@ -1,5 +1,7 @@
 package com.rt.core;
 
+import java.util.ArrayList;
+
 public class MapDataManager {
 	//	Need to find suitible distance threshold
 	private static final double DIST_THRESHOLD = 0.5f;
@@ -40,15 +42,15 @@ public class MapDataManager {
 		MapElement r = (wayDist > legDist)  ? closestLeg : closestWaypoint;
 
 		if(r.position.dist(p) < DIST_THRESHOLD) return r;
-		else return NULL;
+		else return null;
 	}
 
 	public Waypoint getWaypoint(Position p)  {
-		Waypoint r = NULL;
+		Waypoint r = null;
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < waypoints.size(); i++) {
-			if(r == NULL) {
+			if(r == null) {
 				r = waypoints.at(i);
 				lastDist = p.distance(r.position);
 
@@ -66,11 +68,11 @@ public class MapDataManager {
 	}
 
 	public Leg getLeg(Position p) {
-		Leg r = NULL;
+		Leg r = null;
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < legs.size(); i++) {
-			if(r == NULL) {
+			if(r == null) {
 				r = legs.at(i);
 				lastDist = p.distance(r.position);
 
