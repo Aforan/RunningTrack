@@ -1,7 +1,6 @@
 package com.rt.runtime;
 
 import java.util.*;
-
 import com.rt.core.Position;
 
 public class ConstructionInterface extends RunnableInterface {
@@ -9,7 +8,7 @@ public class ConstructionInterface extends RunnableInterface {
 
 	public static final int CLICK_EVENT = 0;
 	public static final int CONNECT_EVENT = 1;
-	public static final int REMOVE_EVENT = 0;
+	public static final int REMOVE_EVENT = 2;
 
 	public ArrayList<MapElement> selectedList;
 	public MapDataManager mdm;
@@ -68,8 +67,8 @@ public class ConstructionInterface extends RunnableInterface {
 						selectedList.add(selectedElement);
 					} else if(selectedElement instanceof(Waypoint)) {
 						if(selectedList.size() >= 2) {
-							MapElement a = selectedList.at(0);
-							MapElement b = selectedList.at(1);
+							MapElement a = selectedList.get(0);
+							MapElement b = selectedList.get(1);
 
 							selectedList.clear();
 
@@ -91,9 +90,9 @@ public class ConstructionInterface extends RunnableInterface {
 					break;
 				case CONNECT_EVENT:
 					if(selectedList.size() == 2) {
-						if(selectedList.at(0) instanceof(Waypoint) && 
-							selectedList.at(1) instanceof(Waypoint)) {
-							Leg addLeg = gmi.getPath(selectedList.at(0).position, selectedList.at(1).position);
+						if(selectedList.get(0) instanceof(Waypoint) && 
+							selectedList.get(1) instanceof(Waypoint)) {
+							Leg addLeg = gmi.getPath(selectedList.get(0).position, selectedList.get(1).position);
 
 							if(addLeg != NULL) {
 								mdm.addLeg(addLeg);
@@ -110,7 +109,7 @@ public class ConstructionInterface extends RunnableInterface {
 					break;
 				case REMOVE_EVENT:
 					if(selectedList.size() > 0) {
-						MapElement rem = selectedList.at(0);
+						MapElement rem = selectedList.get(0);
 						selectedList.remove(0);
 
 						mdm.removeElement(rem);

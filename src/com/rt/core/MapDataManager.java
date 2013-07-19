@@ -63,16 +63,16 @@ public class MapDataManager {
 
 		for(int i = 0; i < waypoints.size(); i++) {
 			if(r == null) {
-				r = waypoints.at(i);
+				r = waypoints.get(i);
 				lastDist = p.distance(r.position);
 
 				break;
 			}
-			double newDist = p.distance(waypoints.at(i).position);
+			double newDist = p.distance(waypoints.get(i).position);
 
 			if(newDist < lastDist) {
 				lastDist = newDist;
-				r = waypoints.at(i);
+				r = waypoints.get(i);
 			}
 		}
 
@@ -85,7 +85,7 @@ public class MapDataManager {
 
 		for(int i = 0; i < legs.size(); i++) {
 			if(r == null) {
-				r = legs.at(i);
+				r = legs.get(i);
 				lastDist = p.distance(r.position);
 
 				break;
@@ -94,13 +94,13 @@ public class MapDataManager {
 			double newDist = -1.0f;
 
 			//	Find closest point in this leg
-			for(int j  = 0; j < legs.at(i).points.size(); j++) {
+			for(int j  = 0; j < legs.get(i).points.size(); j++) {
 				if(newDist == -1.0f) {
-					newDist = p.distance(legs.at(i).points.at(j)); 
+					newDist = p.distance(legs.get(i).points.get(j)); 
 					break;
 				}
 
-				double t = p.distance(legs.at(i).points.at(j));
+				double t = p.distance(legs.get(i).points.get(j));
 			
 				if(t < newDist) {
 					newDist = t;
@@ -109,7 +109,7 @@ public class MapDataManager {
 
 			if(newDist < lastDist) {
 				lastDist = newDist;
-				r = legs.at(i);
+				r = legs.get(i);
 			}
 		}
 
