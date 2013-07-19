@@ -12,4 +12,9 @@ public class Position {
 		this.xCoord = x;
 		this.yCoord = y;
 	}
+
+	public double distance(Position p) {
+		return Math.sqrt(Math.pow(p.xCoord - xCoord, 2) + 
+			Math.pow(p.yCoord + yCoord, 2));
+	}
 }
