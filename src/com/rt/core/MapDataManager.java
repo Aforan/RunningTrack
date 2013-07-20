@@ -20,16 +20,28 @@ public class MapDataManager {
 		return waypoints;
 	}
 
-	public ArrayList<Legs> getLegs() {
+	public ArrayList<Leg> getLegs() {
 		return legs;
 	}
 
 	public void addWaypoint(Waypoint w) {
 		waypoints.add(w);
+
+		if(w.legA != null) {
+			if(!legs.contains(w.legA)) {
+				legs.add(w.legA);
+			}
+		}
+
+		if(w.legB != null) {
+			if(!legs.contains(w.legB)) {
+				legs.add(w.legB);
+			}
+		}
 	}
 
 	public boolean removeElement(MapElement e) {
-		if(e instanceof(Waypoint)) {
+		if(e instanceof Waypoint) {
 			return removeWaypoint((Waypoint) e);
 		} else {
 			return removeLeg((Leg) e);
@@ -37,10 +49,42 @@ public class MapDataManager {
 	}
 
 	public boolean removeLeg(Leg l) {
+		if(l.wayA != null) {
+			if(l.wayA.legA == l) {
+				l.wayA.legA = null;
+			} else {
+				l.wayA.legB = null;
+			}
+		}
+
+		if(l.wayB != null) {
+			if(l.wayB.legA == l) {
+				l.wayB.legA = null;
+			} else {
+				l.wayB.legB = null;
+			}
+		}
+
 		return legs.remove(l);
 	}
 
 	public boolean removeWaypoint(Waypoint w) {
+		if(w.legA != null) {
+			if(w.legA.wayA == w) {
+				w.legA.wayA = null;
+			} else {
+				w.legA.wayB = null;
+			}
+		}
+
+		if(w.legB != null) {
+			if(w.legB.wayA == w) {
+				w.legB.wayA = null;
+			} else {
+				w.legB.wayB = null;
+			}
+		}
+
 		return waypoints.remove(w);
 	}
 
@@ -48,12 +92,12 @@ public class MapDataManager {
 		Waypoint closestWaypoint = getWaypoint(p);
 		Leg closestLeg  = getLeg(p);
 
-		double wayDist = p.distance(closestWaypoint.position);
-		double legDist = p.distance(closestLeg.position);
+		double wayDist = p.distance(closestWaypoint.centerPoint);
+		double legDist = p.distance(closestLeg.centerPoint);
 
 		MapElement r = (wayDist > legDist)  ? closestLeg : closestWaypoint;
 
-		if(r.position.dist(p) < DIST_THRESHOLD) return r;
+		if(r.centerPoint.distance(p) < DIST_THRESHOLD) return r;
 		else return null;
 	}
 
@@ -64,11 +108,11 @@ public class MapDataManager {
 		for(int i = 0; i < waypoints.size(); i++) {
 			if(r == null) {
 				r = waypoints.get(i);
-				lastDist = p.distance(r.position);
+				lastDist = p.distance(r.centerPoint);
 
-				break;
+				continue;
 			}
-			double newDist = p.distance(waypoints.get(i).position);
+			double newDist = p.distance(waypoints.get(i).centerPoint);
 
 			if(newDist < lastDist) {
 				lastDist = newDist;
@@ -84,11 +128,25 @@ public class MapDataManager {
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < legs.size(); i++) {
+			//	If r is null, find the closest point in the first leg
 			if(r == null) {
 				r = legs.get(i);
-				lastDist = p.distance(r.position);
+				lastDist = -1.0f;
 
-				break;
+				for(int j = 0; j < r.points.size(); j++) {
+					if(lastDist == -1.0f) {
+						lastDist = p.distance(r.points.get(j));
+						continue;
+					}
+
+					double t = p.distance(r.points.get(j));
+
+					if(lastDist > t) {
+						lastDist = t;
+					}
+				}
+
+				continue;
 			}
 
 			double newDist = -1.0f;
@@ -97,7 +155,7 @@ public class MapDataManager {
 			for(int j  = 0; j < legs.get(i).points.size(); j++) {
 				if(newDist == -1.0f) {
 					newDist = p.distance(legs.get(i).points.get(j)); 
-					break;
+					continue;
 				}
 
 				double t = p.distance(legs.get(i).points.get(j));
@@ -107,7 +165,7 @@ public class MapDataManager {
 				}
 			}
 
-			if(newDist < lastDist) {
+			if(newDist < lastDist && newDist != -1) {
 				lastDist = newDist;
 				r = legs.get(i);
 			}
@@ -118,5 +176,25 @@ public class MapDataManager {
 
 	public void updatePosition() {
 		//	Need to do this from android
+	}
+
+	public void printMapData() {
+		for(int i = 0; i < waypoints.size(); i++) {
+			Waypoint ww = waypoints.get(i);
+			System.out.printf("\tWaypoint at (%f, %f) with Legs: \n\t\t", ww.centerPoint.xCoord, ww.centerPoint.yCoord);
+		
+
+			for(int j = 0; ww.legA != null && j < ww.legA.points.size(); j++) {
+				System.out.printf("(%f, %f) ", ww.legA.points.get(j).xCoord, ww.legA.points.get(j).yCoord);
+			}
+
+			System.out.printf("\n\t\t");
+
+			for(int j = 0; ww.legB != null && j < ww.legB.points.size(); j++) {
+				System.out.printf("(%f, %f) ", ww.legB.points.get(j).xCoord, ww.legB.points.get(j).yCoord);
+			}
+
+			System.out.printf("\n");
+		}
 	}
 }

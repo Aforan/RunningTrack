@@ -1,6 +1,6 @@
-import java.util.*;
-
 package com.rt.core;
+
+import java.util.*;
 
 public class Leg extends MapElement{
 	public ArrayList<Position> points;
@@ -15,7 +15,7 @@ public class Leg extends MapElement{
 		super(p);
 		this.wayA = wayA;
 		this.wayB = wayB;
-		points = new ArrayList<Point>();
+		points = new ArrayList<Position>();
 	}
 
 	public Leg(Waypoint wayA, Waypoint wayB, ArrayList<Position> points) {

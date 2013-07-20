@@ -1,0 +1,16 @@
+TO COMPILE
+
+RUN $ make
+
+TO RUN
+
+RUN $ cd bin
+    $ java com.rt.TestDriver
+
+RESULTS:
+
+All mdm and map element functionality seems to be working correctly,
+Should still do some remove element tests and data validation.
+As of right now, selection works with a given position.  Construction
+Interface and Location monitor should now be able to use this for their
+own stuff.	
