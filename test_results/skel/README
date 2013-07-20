@@ -1,0 +1,7 @@
+Put Source in src, and test results in results.
+Make sure the results are reasonably specific and
+explain to some extent the function, input and 
+output consistency of the tests.
+
+We should be able to compile and run your tests 
+from ONLY what is in this folder.
