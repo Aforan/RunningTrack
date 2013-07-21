@@ -1,0 +1,9 @@
+USAGE and COMPILATION:
+See ../core_tests/README
+
+All the core runtime classes (Event, EventQueue 
+AbstractRuntime via RunnableTest) seem to be working, 
+ran simple functional tests and a concurrency test
+with RunnableTest (extends RunnableInterface) which handled
+concurrent addition and polling of events correctly.
+Classes should now be ready for use.
