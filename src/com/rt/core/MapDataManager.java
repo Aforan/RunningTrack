@@ -188,6 +188,7 @@ public class MapDataManager {
 			for(int i = 1; i < l.points.size(); i++) {
 				double thisDist = last.distance(l.points.get(i));
 				totalDistance += thisDist;
+				lastPos = l.points.get(i);
 			}
 		}
 
