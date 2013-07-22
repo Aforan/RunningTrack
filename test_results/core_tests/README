@@ -14,3 +14,6 @@ Should still do some remove element tests and data validation.
 As of right now, selection works with a given position.  Construction
 Interface and Location monitor should now be able to use this for their
 own stuff.	
+
+Added MapDataManager.getTotalDistance() test, seems to work fine, use when
+needed

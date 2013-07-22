@@ -184,9 +184,9 @@ public class MapDataManager {
 		for(Leg l : legs) {
 			if(l.points.size() <= 0) continue;
 
-			Position lastPos = l.points.at(0);
+			Position lastPos = l.points.get(0);
 			for(int i = 1; i < l.points.size(); i++) {
-				double thisDist = last.distance(l.points.get(i));
+				double thisDist = lastPos.distance(l.points.get(i));
 				totalDistance += thisDist;
 				lastPos = l.points.get(i);
 			}

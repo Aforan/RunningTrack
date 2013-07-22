@@ -213,6 +213,8 @@ public class TestDriver {
 			}
 		}
 
+		System.out.printf("\tTotal Distance is %f\n", mdm.getTotalDistance());
+
 		System.out.println("Finishing Map Data Tests\n\n");
 	}
 
