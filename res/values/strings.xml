@@ -14,5 +14,6 @@
     <string name="title_activity_abstract_runtime">AbstractRuntimeActivity</string>
     <string name="title_activity_planning">PlanningActivity</string>
     <string name="title_activity_running">RunningActivity</string>
+    <string name="title_activity_plan_choosing">PlanChoosingActivity</string>
 
 </resources>
