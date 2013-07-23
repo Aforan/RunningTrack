@@ -178,6 +178,23 @@ public class MapDataManager {
 		//	Need to do this from android
 	}
 
+	public double getTotalDistance() {
+		double totalDistance = 0.0f;
+
+		for(Leg l : legs) {
+			if(l.points.size() <= 0) continue;
+
+			Position lastPos = l.points.get(0);
+			for(int i = 1; i < l.points.size(); i++) {
+				double thisDist = lastPos.distance(l.points.get(i));
+				totalDistance += thisDist;
+				lastPos = l.points.get(i);
+			}
+		}
+
+		return totalDistance;
+	}
+
 	public void printMapData() {
 		for(int i = 0; i < waypoints.size(); i++) {
 			Waypoint ww = waypoints.get(i);

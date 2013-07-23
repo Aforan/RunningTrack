@@ -6,6 +6,6 @@ import com.rt.core.MapElement;
 
 public abstract class AbstractRuntimeActivity extends Activity{
 
-	abstract void updateMapElements(ArrayList<MapElement> elements);
+	abstract void updateMapElements(ArrayList<MapElement> elements, ArrayList<MapElement> selectedElements);
 
 }
