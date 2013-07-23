@@ -63,12 +63,20 @@ public class TestDriver {
 			elapsed += curTime - lastTime;
 			lastTime = curTime;
 
-			System.out.printf("\tNow at pos (%f, %f)\n", lm.lastPosition.xCoord, lm.lastPosition.yCoord);
+			lm.eventQueue.addEvent(new Event(LocationMonitor.UPDATE_POS, 
+				new Position(lm.currentPos.xCoord+1.0f, lm.currentPos.yCoord+1.0f)));
+			
+			try {
+				Thread.sleep(250);
+			} catch(Exception e) {
+
+			} 
+			System.out.printf("\tNow at pos (%f, %f)\n", lm.currentPos.xCoord, lm.currentPos.yCoord);
 
 			Leg ll = lm.currentLeg;
 
 			if(ll != null) {
-				System.out.printf("\t\tCurrent Leg is: ", lm.lastPosition);
+				System.out.printf("\t\tCurrent Leg is: ", lm.currentPos);
 
 				for(int i = 0; i < ll.points.size(); i++) {
 					System.out.printf("(%f, %f) ", ll.points.get(i).xCoord, ll.points.get(i).yCoord);
@@ -77,14 +85,10 @@ public class TestDriver {
 				System.out.printf("\n");
 
 			} else {
-				System.out.printf("\t\tCurrent Leg is null\n", lm.lastPosition);
+				System.out.printf("\t\tCurrent Leg is null\n", lm.currentPos);
 			}
 
-			try {
-				Thread.sleep(500);
-			} catch(Exception e) {
-
-			} 		
+		
 		}
 
 		System.out.println("Finished Location Monitor Tests");

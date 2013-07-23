@@ -13,7 +13,7 @@ public class MapDataManager {
 	public MapDataManager() {
 		waypoints = new ArrayList<Waypoint>();
 		legs = new ArrayList<Leg>();
-		updatePosition();
+		currentPos = new Position();
 	}
 
 	public ArrayList<Waypoint> getWaypoints() {
@@ -174,13 +174,8 @@ public class MapDataManager {
 		return r;
 	}
 
-	public void updatePosition() {
-		if(currentPos == null) {
-			currentPos = new Position();
-		} else {
-			currentPos.xCoord += 1.0f;
-			currentPos.yCoord += 1.0f;
-		}
+	public void updatePosition(Position p) {
+		currentPos = p;
 	}
 
 	public double getTotalDistance() {

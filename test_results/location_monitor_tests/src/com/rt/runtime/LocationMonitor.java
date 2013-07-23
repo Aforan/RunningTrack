@@ -6,11 +6,12 @@ import com.rt.core.*;
 import com.rt.ui.RunningActivity;
 
 public class LocationMonitor extends RunnableInterface{
-	public static final long GPS_WAIT_TIME = 500;
+	public static final long UPDATE_TIME = 500;
 
 	public static final int PAUSE_EVENT = 0;
 	public static final int KILL_EVENT = 1;
 	public static final int UN_PAUSE_EVENT = 2;
+	public static final int UPDATE_POS = 3;
 
 	public Leg currentLeg;
 //	public Waypoint nextWaypoint;
@@ -18,7 +19,7 @@ public class LocationMonitor extends RunnableInterface{
 	public double distanceLeft;
 	public MapDataManager mdm;
 	public RunningActivity ra;
-	public Position lastPosition;
+	public Position currentPos;
 	private boolean running;
 	private long lastGPSTime;
 	private boolean paused;
@@ -29,9 +30,8 @@ public class LocationMonitor extends RunnableInterface{
 
 		if(mdm != null) {
 			distanceLeft = mdm.getTotalDistance();
-			
-			mdm.updatePosition();
-			lastPosition = mdm.currentPos;
+
+			currentPos = mdm.currentPos;
 			lastGPSTime = System.currentTimeMillis();
 
 			running = true;
@@ -42,8 +42,6 @@ public class LocationMonitor extends RunnableInterface{
 		}
 
 		distanceRan = 0.0f;
-		mdm.updatePosition();
-		lastPosition = mdm.currentPos;
 	}
 	
 	private boolean IsValidGPS(Position p){
@@ -67,25 +65,10 @@ public class LocationMonitor extends RunnableInterface{
 
 	@Override
 	public void tick(long time) {
-		if(time >= GPS_WAIT_TIME) {
-			mdm.updatePosition();
-			Position newPos = mdm.currentPos;
+		if(time >= UPDATE_TIME) {
 			lastGPSTime = System.currentTimeMillis();
 
-			MapElement onElement = mdm.getElement(newPos);
-
-			//	If we are currently on a map element (eg reasonably close)
-			if(onElement != null) {
-				if(onElement instanceof Leg) {
-					currentLeg = (Leg) onElement;
-				} 
-				
-				double dist = newPos.distance(lastPosition);
-				distanceRan += dist;
-				distanceLeft -= dist;
-			} else currentLeg = null;
-
-			lastPosition = newPos;
+			//updateCurrentLeg();
 		}
 	}
 
@@ -104,9 +87,37 @@ public class LocationMonitor extends RunnableInterface{
 			case UN_PAUSE_EVENT:
 				paused = false;
 				break;
+			case UPDATE_POS:
+				if(!paused) {
+					mdm.updatePosition(e.position);
+					double dist = currentPos.distance(e.position);
+					distanceRan += dist;
+					distanceLeft -= dist;
+					currentPos = e.position;
+					updateCurrentLeg();
+				}
+				break;
 			default:
 				break;
 			}
 		}
+	}
+
+	private void updateCurrentLeg() {
+		MapElement onElement = mdm.getElement(currentPos);
+
+		//	If we are currently on a map element (eg reasonably close)
+		if(onElement != null) {
+			if(onElement instanceof Leg) {
+				if(currentLeg != (Leg) onElement) {
+					currentLeg = (Leg) onElement;
+
+					ArrayList<MapElement> tSelected = new ArrayList<MapElement>();
+					tSelected.add(currentLeg);
+					ra.updateMapElements(null, tSelected);					
+				}
+
+			} 
+		} else currentLeg = null;
 	}
 }
