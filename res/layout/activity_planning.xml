@@ -1,16 +1,93 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="#D000"
+      android:orientation="horizontal" >
+
+      <Button
+          android:id="@+id/connect_wp_button"
+          android:layout_width="100sp"
+          android:layout_height="50sp"
+          android:layout_weight="1"
+          android:height="48dp"
+          android:text="@string/connect_waypoints"
+          android:textSize="15sp"
+          android:onClick="connectWaypoints" />
+
+      <Button
+          android:id="@+id/deselect_wps_button"
+          android:layout_width="100sp"
+          android:layout_height="50sp"
+          android:layout_weight="1"
+          android:height="50dp"
+          android:text="@string/deselect_all"
+          android:textSize="15sp"
+          android:onClick="deselectBoth" />
+
+  </LinearLayout>
+    	
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:background="#D000" >
+      
+      <ToggleButton
+          android:id="@+id/place_waypoints"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:checked="true"
+          android:onClick="swapButtons"
+          android:textOff="@string/place_way"
+          android:textOn="@string/place_way"
+          android:textSize="15sp" />
+      	  
+      <ToggleButton
+          android:id="@+id/del_waypoints"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:checked="false"
+          android:onClick="swapButtons"
+          android:textOff="@string/del_way"
+          android:textOn="@string/del_way"
+          android:textSize="15sp" />
+
+  </LinearLayout>
+  
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".PlanningActivity" >
+    android:layout_height="match_parent">
+    <fragment
+      android:id="@+id/map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      class="com.google.android.gms.maps.SupportMapFragment"/>
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|right"
+      android:background="#D000"
+      android:orientation="vertical"
+      android:padding="1dp">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0.5"
+          android:onClick="switchToRunning"
+          android:text="@string/lets_run"/>
+      </LinearLayout>
+      
+    </LinearLayout>
+  </FrameLayout>
+</LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-</RelativeLayout>

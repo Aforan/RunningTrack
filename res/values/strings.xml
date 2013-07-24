@@ -15,5 +15,10 @@
     <string name="title_activity_planning">PlanningActivity</string>
     <string name="title_activity_running">RunningActivity</string>
     <string name="title_activity_plan_choosing">PlanChoosingActivity</string>
+    <string name="place_way">Place Waypoints</string>
+    <string name="del_way">Delete Waypoints</string>
+    <string name="connect_waypoints">Connect Waypoints</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="lets_run">Let\'s Run!</string>
 
 </resources>
