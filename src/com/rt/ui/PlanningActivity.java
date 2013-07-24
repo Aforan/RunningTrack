@@ -256,8 +256,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 			//and mark the current marker the new second marker
 			else {
 				//Transition the second to the first
+				deselectFirstMarker(firstMarkerSelected);
 				selectFirstMarker(secondMarkerSelected);
-				deselectSecondMarker(secondMarkerSelected);
 				selectSecondMarker(marker);
 			}
 			
