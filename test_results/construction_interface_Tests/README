@@ -1,0 +1,8 @@
+USAGE and COMPILATION:
+See ../core_tests/README
+
+Implemented LocationMonitor, should be working for 
+the most part, currently, we poll for GPS every 0.5
+seconds.  We respond to three event types : pause,
+unpause and kill.  Use lastPosition and currentLeg
+from ui.
