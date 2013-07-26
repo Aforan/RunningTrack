@@ -1,16 +1,13 @@
 package com.rt.runtime.maps;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
- 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
- 
 import com.google.android.gms.maps.model.LatLng;
 import com.rt.core.Leg;
 import com.rt.core.Waypoint;
@@ -39,7 +36,7 @@ public class GMapsInterfacer{
 	}
 	
 	//String not void
-	private static String query(String url) throws Exception{
+	private static String query(String strUrl) throws Exception{
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
@@ -82,15 +79,15 @@ public class GMapsInterfacer{
 		ArrayList<LatLng> list = new ArrayList<LatLng>();
 
 		try {		
-			jRoutes = jObject.getJSONArray("routes");
+			JSONArray jRoutes = jObject.getJSONArray("routes");
 
 			/** Traversing all routes */
 			for(int i = 0; i < jRoutes.length(); i++){
 				JSONArray op = ((JSONObject)jRoutes.get(i)).getJSONArray("overview_polyline");
 
-				if(op.size() > 0) {                
+				if(op.length() > 0) {                
 					String polyline = "";
-					polyline = (String)((JSONObject)((JSONObject)op.get("points");
+					polyline = (String)(((JSONObject)op.get(0)).get("points"));
 
 					list.addAll(decodePoly(polyline));
 				}
