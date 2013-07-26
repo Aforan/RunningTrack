@@ -45,6 +45,20 @@ public class MapDataManager {
 		}
 	}
 
+	public void addLeg(Leg l) {
+		if(!waypoints.contains(l.wayA)) {
+			waypoints.add(l.wayA);
+		}
+
+		if(!waypoints.contains(l.wayB)) {
+			waypoints.add(l.wayB);
+		}
+
+		if(!legs.contains(l)) {
+			legs.add(l);
+		}
+	}
+
 	public boolean removeElement(MapElement e) {
 		if(e instanceof Waypoint) {
 			return removeWaypoint((Waypoint) e);
