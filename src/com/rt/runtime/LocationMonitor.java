@@ -2,6 +2,7 @@ package com.rt.runtime;
 
 import java.util.*;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.rt.core.*;
 import com.rt.ui.RunningActivity;
 
@@ -19,7 +20,7 @@ public class LocationMonitor extends RunnableInterface{
 	public double distanceLeft;
 	public MapDataManager mdm;
 	public RunningActivity ra;
-	public Position currentPos;
+	public LatLng currentPos;
 	private boolean running;
 	private long lastGPSTime;
 	private boolean paused;
@@ -44,7 +45,7 @@ public class LocationMonitor extends RunnableInterface{
 		distanceRan = 0.0f;
 	}
 	
-	private boolean IsValidGPS(Position p){
+	private boolean IsValidGPS(LatLng p){
 		return true;
 	}
 
@@ -90,7 +91,7 @@ public class LocationMonitor extends RunnableInterface{
 			case UPDATE_POS:
 				if(!paused) {
 					mdm.updatePosition(e.position);
-					double dist = currentPos.distance(e.position);
+					double dist = MapDataManager.distance(e.position, currentPos);
 					distanceRan += dist;
 					distanceLeft -= dist;
 					currentPos = e.position;

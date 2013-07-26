@@ -1,4 +1,7 @@
 package com.rt.ui;
+import java.util.ArrayList;
+
+import com.rt.core.MapElement;
 import com.rt.runtime.LocationMonitor;
 
 import android.os.Bundle;
@@ -27,7 +30,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 
-public class RunningActivity extends FragmentActivity
+public class RunningActivity extends AbstractRuntimeActivity
 implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 	
 	private GoogleMap map;
@@ -97,6 +100,14 @@ public void onConnected(Bundle connectionHint) {
 @Override
 public void onDisconnected() {
 	//do nothing
+	
+}
+
+@Override
+public
+void updateMapElements(ArrayList<MapElement> elements,
+		ArrayList<MapElement> selectedElements) {
+	// TODO Auto-generated method stub
 	
 }
 	
