@@ -19,6 +19,7 @@ public class GMapsInterfacer{
 	
 	//Leg not void
 	public static Leg getPath(Waypoint start, Waypoint end){
+		System.out.println("Fuuuuck");
 		String url = getDirectionsUrl(start.centerPoint, end.centerPoint);
 		String response;
 		try {
@@ -151,7 +152,7 @@ public class GMapsInterfacer{
  
 		// Building the url to the web service
 		String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
- 
+		System.out.println("printing " + url);
 		return url;
 	}
 }

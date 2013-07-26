@@ -125,7 +125,7 @@ public class MapDataManager {
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < waypoints.size(); i++) {
-			if(p == null) {
+			if(lastDist == 0.0f) {
 				r = waypoints.get(i);
 				lastDist = distance(p, r.centerPoint);
 

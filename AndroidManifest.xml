@@ -9,7 +9,7 @@
         android:required="true" />
     
     <uses-sdk
-        android:minSdkVersion="17"
+        android:minSdkVersion="10"
         android:targetSdkVersion="17" />
 	
     <permission
@@ -32,6 +32,11 @@
         <activity
             android:name="com.rt.ui.MenuActivity"
             android:label="@string/main_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.rt.ui.Statistics"

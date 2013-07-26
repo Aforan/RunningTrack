@@ -45,7 +45,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	
 	private GoogleMap map;
 	private LocationManager lm;
-	private GMapsInterfacer gmi;
 	private LocationClient lc;
 	private boolean placeWpOn, delWpOn;
 	private ToggleButton placeWaypointsButton;
@@ -80,7 +79,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		secondMarkerSelected = null;
 		
 		mdm = new MapDataManager();
-		gmi = new GMapsInterfacer();
 		lines = new ArrayList<Polyline>();
 		
 	}
@@ -371,7 +369,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 			LatLng firstPos = firstMarkerSelected.getPosition();
 			LatLng secondPos = secondMarkerSelected.getPosition();
 					
-			Leg leg = gmi.getPath(mdm.getWaypoint(firstPos), mdm.getWaypoint(secondPos));
+			Leg leg = GMapsInterfacer.getPath(mdm.getWaypoint(firstPos), mdm.getWaypoint(secondPos));
 			
 			//POLYLINE FOR PATH
 			lines.add(map.addPolyline(new PolylineOptions()
