@@ -29,6 +29,10 @@ public class GMapsInterfacer{
 			JSONObject r = new JSONObject(response);
 			ArrayList<LatLng> list = constructMapData(r);
 
+			if(list.size() <= 0) return null;
+
+			Leg l = new Leg(start, end, list);
+			return l;
 		} catch(Exception e) {
 			return null;
 		}
