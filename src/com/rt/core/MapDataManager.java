@@ -2,18 +2,21 @@ package com.rt.core;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.location.Location;
+
 public class MapDataManager {
 	//	Need to find suitible distance threshold
 	private static final double DIST_THRESHOLD = 0.5f;
 
 	private ArrayList<Waypoint> waypoints;
 	private ArrayList<Leg> legs;
-	public Position currentPos;
+	public LatLng currentPos;
 
 	public MapDataManager() {
 		waypoints = new ArrayList<Waypoint>();
 		legs = new ArrayList<Leg>();
-		currentPos = new Position();
+		currentPos = new LatLng(0.0f, 0.0f);
 	}
 
 	public ArrayList<Waypoint> getWaypoints() {
@@ -88,31 +91,33 @@ public class MapDataManager {
 		return waypoints.remove(w);
 	}
 
-	public MapElement getElement(Position p) {
+	public MapElement getElement(LatLng p) {
 		Waypoint closestWaypoint = getWaypoint(p);
 		Leg closestLeg  = getLeg(p);
 
-		double wayDist = p.distance(closestWaypoint.centerPoint);
-		double legDist = p.distance(closestLeg.centerPoint);
+		float res[2];
+
+		double wayDist = distance(p, closestWaypoint.centerPoint);
+		double legDist = distance(p, closestLeg.centerPoint);
 
 		MapElement r = (wayDist > legDist)  ? closestLeg : closestWaypoint;
 
-		if(r.centerPoint.distance(p) < DIST_THRESHOLD) return r;
+		if(distance(r.centerPoint, p) < DIST_THRESHOLD) return r;
 		else return null;
 	}
 
-	public Waypoint getWaypoint(Position p)  {
+	public Waypoint getWaypoint(LatLng p)  {
 		Waypoint r = null;
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < waypoints.size(); i++) {
-			if(r == null) {
+			if(LatLng == null) {
 				r = waypoints.get(i);
-				lastDist = p.distance(r.centerPoint);
+				lastDist = distance(p, r.centerPoint);
 
 				continue;
 			}
-			double newDist = p.distance(waypoints.get(i).centerPoint);
+			double newDist = distance(p, waypoints.get(i).centerPoint);
 
 			if(newDist < lastDist) {
 				lastDist = newDist;
@@ -123,7 +128,7 @@ public class MapDataManager {
 		return r;
 	}
 
-	public Leg getLeg(Position p) {
+	public Leg getLeg(LatLng p) {
 		Leg r = null;
 		double lastDist = 0.0f;
 
@@ -135,11 +140,11 @@ public class MapDataManager {
 
 				for(int j = 0; j < r.points.size(); j++) {
 					if(lastDist == -1.0f) {
-						lastDist = p.distance(r.points.get(j));
+						lastDist = distance(p, r.points.get(j));
 						continue;
 					}
 
-					double t = p.distance(r.points.get(j));
+					double t = distance(p, r.points.get(j));
 
 					if(lastDist > t) {
 						lastDist = t;
@@ -154,12 +159,12 @@ public class MapDataManager {
 			//	Find closest point in this leg
 			for(int j  = 0; j < legs.get(i).points.size(); j++) {
 				if(newDist == -1.0f) {
-					newDist = p.distance(legs.get(i).points.get(j)); 
+					newDist = distance(p, legs.get(i).points.get(j));
 					continue;
 				}
 
-				double t = p.distance(legs.get(i).points.get(j));
-			
+				double t = distance(p, legs.get(i).points.get(j));
+
 				if(t < newDist) {
 					newDist = t;
 				}
@@ -174,7 +179,7 @@ public class MapDataManager {
 		return r;
 	}
 
-	public void updatePosition(Position p) {
+	public void updatePosition(LatLng p) {
 		currentPos = p;
 	}
 
@@ -184,9 +189,9 @@ public class MapDataManager {
 		for(Leg l : legs) {
 			if(l.points.size() <= 0) continue;
 
-			Position lastPos = l.points.get(0);
+			LatLng lastPos = l.points.get(0);
 			for(int i = 1; i < l.points.size(); i++) {
-				double thisDist = lastPos.distance(l.points.get(i));
+				double thisDist = distance(lastPos, l.points.get(i));
 				totalDistance += thisDist;
 				lastPos = l.points.get(i);
 			}
@@ -213,5 +218,18 @@ public class MapDataManager {
 
 			System.out.printf("\n");
 		}
+	}
+
+
+	public static double distance(LatLng a, LatLng b) {
+		float res[2];
+
+		Location.distanceBetween(	a.latitude,
+									a.longitude,
+									b.latitude,
+									b.longitude,
+									res);
+
+		return res[0];
 	}
 }
