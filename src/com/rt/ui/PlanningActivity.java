@@ -1,9 +1,14 @@
 package com.rt.ui;
 
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import com.rt.R;
+import com.rt.core.Leg;
 import com.rt.core.MapDataManager;
+import com.rt.core.MapElement;
+import com.rt.core.Waypoint;
 import com.rt.runtime.maps.GMapsInterfacer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -23,21 +28,23 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import android.location.Location;
 import android.location.LocationManager;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
-public class PlanningActivity extends FragmentActivity
-implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnMapClickListener, OnMarkerClickListener {
+public class PlanningActivity extends AbstractRuntimeActivity
+implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnMapClickListener, OnMarkerClickListener  {
 	
 	private GoogleMap map;
 	private LocationManager lm;
-	private MapDataManager mdm;
 	private GMapsInterfacer gmi;
 	private LocationClient lc;
 	private boolean placeWpOn, delWpOn;
@@ -46,6 +53,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	private UiSettings uisets;
 	private Marker firstMarkerSelected;
 	private Marker secondMarkerSelected;
+	private ArrayList<Polyline> lines;
 	
 	
 	//in testing
@@ -73,6 +81,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		
 		mdm = new MapDataManager();
 		gmi = new GMapsInterfacer();
+		lines = new ArrayList<Polyline>();
 		
 	}
 	
@@ -101,6 +110,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		        uisets = map.getUiSettings();
 		        map.setOnMapClickListener(this);
 		        map.setOnMarkerClickListener(this);
+		       
 		      }
 	   }
    }
@@ -201,13 +211,41 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	        .title("Waypoint")
 	        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 			
+			//Sends data to MDM
+			mdm.addWaypoint(new Waypoint(point));
+			
 			//This is to force a map redraw, so that the currently placed marker can be clicked.
 			CameraPosition position = map.getCameraPosition();
 			LatLng temp = position.target;
 			CameraUpdate moveToFirst = CameraUpdateFactory.newLatLng(new LatLng(temp.latitude+.000001, temp.longitude+.000001));
-	    	map.animateCamera(moveToFirst);
-	    	
-	    	
+	    	map.animateCamera(moveToFirst);	
+		}
+		
+		//This will only happen if the user is (hopefully) trying to delete a leg
+		if(delWpOn){
+			Leg possibleLeg = mdm.getLeg(point);
+			
+			//A matching leg has been found within a reasonable distance of the click
+			if(possibleLeg != null){
+				
+				//Use the points stored in leg to recreate a similar polyline, then compare it to stored polylines
+				Polyline tempLine = map.addPolyline(new PolylineOptions()
+			     .addAll((possibleLeg.points))
+			     .width(5)
+			     .color(Color.RED));
+				
+				//Find it, remove it.
+				for(int i=0; i<lines.size(); i++){
+					if(lines.get(i).equals(tempLine)){
+						tempLine.remove();
+						lines.get(i).remove();
+						lines.remove(i);
+						mdm.removeLeg(possibleLeg);
+						break;
+					}
+				}
+				
+			}
 		}
 		
 		
@@ -236,7 +274,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 				secondMarkerSelected = null;
 			
 			//Remove this waypoint from the MDM
-			mdm.removeWaypoint(mdm.getWaypoint(marker.getPosition());
+			mdm.removeWaypoint(mdm.getWaypoint(marker.getPosition()));
 				
 			marker.setVisible(false);
 			marker.remove();
@@ -326,6 +364,23 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	//Don't do anything for right now
 	public void connectWaypoints(View view){
 		
+		//If there are two markers that can be connected
+		if(firstMarkerSelected != null && secondMarkerSelected != null){
+			
+		    //Get GmapsInterfacer to do the work for us
+			LatLng firstPos = firstMarkerSelected.getPosition();
+			LatLng secondPos = secondMarkerSelected.getPosition();
+					
+			Leg leg = gmi.getPath(mdm.getWaypoint(firstPos), mdm.getWaypoint(secondPos));
+			
+			//POLYLINE FOR PATH
+			lines.add(map.addPolyline(new PolylineOptions()
+		     .addAll((leg.points))
+		     .width(5)
+		     .color(Color.RED)));
+
+		}
+			
 	}
 	
 	//Deselect button calls this
@@ -336,6 +391,13 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		if(secondMarkerSelected != null){
 			deselectSecondMarker(secondMarkerSelected);
 		}
+	}
+
+	@Override
+	void updateMapElements(ArrayList<MapElement> elements,
+			ArrayList<MapElement> selectedElements) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
