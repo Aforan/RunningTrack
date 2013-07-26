@@ -1,9 +1,11 @@
 package com.rt.core;
 
-public abstract class MapElement {
-	public Position centerPoint;
+import com.google.android.gms.maps.model.LatLng;
 
-	public MapElement(Position p) {
+public abstract class MapElement {
+	public LatLng centerPoint;
+
+	public MapElement(LatLng p) {
 		centerPoint = p;
 	}
 }
