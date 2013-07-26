@@ -2,8 +2,10 @@ package com.rt.core;
 
 import java.util.ArrayList;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.location.Location;
+
 
 public class MapDataManager {
 	//	Need to find suitible distance threshold
@@ -95,8 +97,6 @@ public class MapDataManager {
 		Waypoint closestWaypoint = getWaypoint(p);
 		Leg closestLeg  = getLeg(p);
 
-		float res[2];
-
 		double wayDist = distance(p, closestWaypoint.centerPoint);
 		double legDist = distance(p, closestLeg.centerPoint);
 
@@ -111,7 +111,7 @@ public class MapDataManager {
 		double lastDist = 0.0f;
 
 		for(int i = 0; i < waypoints.size(); i++) {
-			if(LatLng == null) {
+			if(p == null) {
 				r = waypoints.get(i);
 				lastDist = distance(p, r.centerPoint);
 
@@ -203,17 +203,17 @@ public class MapDataManager {
 	public void printMapData() {
 		for(int i = 0; i < waypoints.size(); i++) {
 			Waypoint ww = waypoints.get(i);
-			System.out.printf("\tWaypoint at (%f, %f) with Legs: \n\t\t", ww.centerPoint.xCoord, ww.centerPoint.yCoord);
+			System.out.printf("\tWaypoint at (%f, %f) with Legs: \n\t\t", ww.centerPoint.latitude, ww.centerPoint.longitude);
 		
 
 			for(int j = 0; ww.legA != null && j < ww.legA.points.size(); j++) {
-				System.out.printf("(%f, %f) ", ww.legA.points.get(j).xCoord, ww.legA.points.get(j).yCoord);
+				System.out.printf("(%f, %f) ", ww.legA.points.get(j).latitude, ww.legA.points.get(j).longitude);
 			}
 
 			System.out.printf("\n\t\t");
 
 			for(int j = 0; ww.legB != null && j < ww.legB.points.size(); j++) {
-				System.out.printf("(%f, %f) ", ww.legB.points.get(j).xCoord, ww.legB.points.get(j).yCoord);
+				System.out.printf("(%f, %f) ", ww.legB.points.get(j).latitude, ww.legB.points.get(j).longitude);
 			}
 
 			System.out.printf("\n");
@@ -222,7 +222,7 @@ public class MapDataManager {
 
 
 	public static double distance(LatLng a, LatLng b) {
-		float res[2];
+		float[] res = new float[2];
 
 		Location.distanceBetween(	a.latitude,
 									a.longitude,

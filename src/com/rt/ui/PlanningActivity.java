@@ -3,6 +3,8 @@ package com.rt.ui;
 
 import android.os.Bundle;
 import com.rt.R;
+import com.rt.core.MapDataManager;
+import com.rt.runtime.maps.GMapsInterfacer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -35,6 +37,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	
 	private GoogleMap map;
 	private LocationManager lm;
+	private MapDataManager mdm;
+	private GMapsInterfacer gmi;
 	private LocationClient lc;
 	private boolean placeWpOn, delWpOn;
 	private ToggleButton placeWaypointsButton;
@@ -66,6 +70,9 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		
 		firstMarkerSelected = null;
 		secondMarkerSelected = null;
+		
+		mdm = new MapDataManager();
+		gmi = new GMapsInterfacer();
 		
 	}
 	
@@ -227,6 +234,9 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 			
 			else if(second)
 				secondMarkerSelected = null;
+			
+			//Remove this waypoint from the MDM
+			mdm.removeWaypoint(mdm.getWaypoint(marker.getPosition());
 				
 			marker.setVisible(false);
 			marker.remove();
