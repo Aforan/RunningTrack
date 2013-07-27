@@ -391,10 +391,23 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		}
 	}
 
-	@Override
-	void updateMapElements(ArrayList<MapElement> elements,
-			ArrayList<MapElement> selectedElements) {
-		// TODO Auto-generated method stub
+	public void recreateMap(ArrayList<Waypoint> waypoints,
+			ArrayList<Leg> legs, GoogleMap map) {
+		
+		for(int i=0; i<waypoints.size(); i++){
+			map.addMarker(new MarkerOptions()
+	        .position(waypoints.get(i).centerPoint)
+	        .title("Waypoint")
+	        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+		}
+		
+		for(int i=0; i<legs.size(); i++){
+			map.addPolyline(new PolylineOptions()
+		     .addAll(legs.get(i).points)
+		     .width(5)
+		     .color(Color.RED));
+		}
+		
 		
 	}
 	

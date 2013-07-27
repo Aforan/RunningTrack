@@ -1,7 +1,9 @@
 package com.rt.ui;
 import java.util.ArrayList;
 
+import com.rt.core.Leg;
 import com.rt.core.MapElement;
+import com.rt.core.Waypoint;
 import com.rt.runtime.LocationMonitor;
 
 import android.os.Bundle;
@@ -22,9 +24,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import android.location.Location;
 import android.location.LocationManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -104,14 +109,25 @@ public void onDisconnected() {
 }
 
 @Override
-public
-void updateMapElements(ArrayList<MapElement> elements,
-		ArrayList<MapElement> selectedElements) {
-	// TODO Auto-generated method stub
+public void recreateMap(ArrayList<Waypoint> waypoints,
+		ArrayList<Leg> legs, GoogleMap map) {
 	
+	for(int i=0; i<waypoints.size(); i++){
+		map.addMarker(new MarkerOptions()
+        .position(waypoints.get(i).centerPoint)
+        .title("Waypoint")
+        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+	}
+	
+	for(int i=0; i<legs.size(); i++){
+		map.addPolyline(new PolylineOptions()
+	     .addAll(legs.get(i).points)
+	     .width(5)
+	     .color(Color.RED));
+	}
+	
+	
+
+
 }
-	
-	
-
-
 }
