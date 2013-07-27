@@ -16,6 +16,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -41,6 +42,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 	
 	private GoogleMap map;
 	private LocationManager lm;
+	private Location currentLoc;
 	private LocationClient lc;
 	private static final LocationRequest REQUEST = LocationRequest.create()
 		      .setInterval(5000)         // 5 seconds
@@ -86,7 +88,13 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
 @Override
 public void onLocationChanged(Location location) {
-	//tracing of user here?
+	//Tracing of user
+	map.addPolyline(new PolylineOptions()
+    .add(new LatLng(location.getLatitude(), location.getLongitude()), new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude()))
+    .width(5)
+    .color(Color.YELLOW));
+	
+	currentLoc = location;
 	
 }
 
@@ -101,6 +109,12 @@ public void onConnected(Bundle connectionHint) {
 	lc.requestLocationUpdates(
 	        REQUEST,
 	        this);
+	currentLoc = lc.getLastLocation();
+    
+    if(currentLoc != null){
+    	CameraUpdate startCam = CameraUpdateFactory.newLatLngZoom(new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude()), 17f);
+    	map.moveCamera(startCam);
+    }
 	
 }
 
@@ -120,6 +134,7 @@ public void recreateMap(ArrayList<Waypoint> waypoints,
         .title("Waypoint")
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 	}
+	
 	
 	System.out.println(legs.size());
 	for(int i=0; i<legs.size(); i++){

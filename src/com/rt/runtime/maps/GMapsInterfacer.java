@@ -16,6 +16,16 @@ import com.rt.core.Waypoint;
 
 import static com.rt.test.TestDriver.log;
 
+/*
+ * NOTE:
+ * In an effort to not reinvent the wheel, a majority of the code in this class was derived from
+ * two sources, and they each deserve credit.
+ * 
+ * Jeffrey Sambells - Decoding PolyLine points. http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
+ * George Mathew - Using Google Direction API with Android - http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
+ * 
+ * Modifications and fixes were done by Andrew Foran.
+ */
 public class GMapsInterfacer {
 	
 	//SAXParserFactory parseFactory; 
