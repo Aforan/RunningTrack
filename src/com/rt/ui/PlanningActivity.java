@@ -87,7 +87,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	protected void onResume() {
 	    super.onResume();
 	    setUpMapIfNeeded();
-	 
+	    
+	    
 	    map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 	    uisets.setZoomControlsEnabled(false);
 	    
@@ -108,7 +109,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		        uisets = map.getUiSettings();
 		        map.setOnMapClickListener(this);
 		        map.setOnMarkerClickListener(this);
-		       
+		        
 		      }
 	   }
    }
@@ -376,24 +377,19 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		    //Get GmapsInterfacer to do the work for us
 			LatLng firstPos = firstMarkerSelected.getPosition();
 			LatLng secondPos = secondMarkerSelected.getPosition();
-			
-			System.out.println("Lat = " + firstPos.latitude + "Long = " + firstPos.longitude);
-			System.out.println("Lat = " + secondPos.latitude + "Long = " + secondPos.longitude);
 					
 			Leg leg = GMapsInterfacer.getPath(mdm.getWaypoint(firstPos), mdm.getWaypoint(secondPos));
+			mdm.addLeg(leg);
+			Toast toast = Toast.makeText(getApplicationContext(), "Drawing connecting route...", Toast.LENGTH_SHORT);
+			toast.show();
 			
-			System.out.println("There are " + leg.points.size() + " points in the path.");
-			for(int i=0; i<leg.points.size(); i++){
-				System.out.println("Lat = " + leg.points.get(i).latitude + "Long = " + leg.points.get(i).longitude);
-			}
 			//POLYLINE FOR PATH
 			lines.add(map.addPolyline(new PolylineOptions()
 		     .addAll((leg.points))
 		     .width(5)
 		     .color(Color.BLUE)));
 			
-			Toast toast = Toast.makeText(getApplicationContext(), "Drawing connecting route...", Toast.LENGTH_SHORT);
-			toast.show();
+			
 
 		}
 			
@@ -410,7 +406,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	}
 	@Override
 	public void recreateMap(ArrayList<Waypoint> waypoints,
-			ArrayList<Leg> legs, GoogleMap map) {
+			ArrayList<Leg> legs) {
 		
 		for(int i=0; i<waypoints.size(); i++){
 			map.addMarker(new MarkerOptions()
@@ -419,11 +415,14 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 		}
 		
-		for(int i=0; i<legs.size(); i++){
-			map.addPolyline(new PolylineOptions()
-		     .addAll(legs.get(i).points)
-		     .width(5)
-		     .color(Color.RED));
+		int lineSize = lines.size();
+		for(int i=0; i<lineSize; i++){
+			lines.add(map.addPolyline(new PolylineOptions()
+			     .addAll(lines.get(i).getPoints())
+			     .width(5)
+			     .color(lines.get(i).getColor())));
+			
+			lines.remove(i);
 		}
 		
 		

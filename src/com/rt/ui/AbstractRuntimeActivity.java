@@ -11,7 +11,6 @@ import com.rt.core.MapElement;
 import com.rt.core.Waypoint;
 
 public abstract class AbstractRuntimeActivity extends FragmentActivity{
-	protected MapDataManager mdm;
-	abstract void recreateMap(ArrayList<Waypoint> waypoints, ArrayList<Leg> legs, GoogleMap map);
-
+	protected static MapDataManager mdm;
+	abstract void recreateMap(ArrayList<Waypoint> waypoints, ArrayList<Leg> legs);
 }

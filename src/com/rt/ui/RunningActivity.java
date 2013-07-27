@@ -33,6 +33,7 @@ import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 
 public class RunningActivity extends AbstractRuntimeActivity
@@ -69,6 +70,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 		      // Check if we were successful in obtaining the map.
 		      if (map != null) {
 		        map.setMyLocationEnabled(true);
+		        recreateMap(mdm.getWaypoints(), mdm.getLegs());
 		      }
 	   }
    }
@@ -110,20 +112,21 @@ public void onDisconnected() {
 
 @Override
 public void recreateMap(ArrayList<Waypoint> waypoints,
-		ArrayList<Leg> legs, GoogleMap map) {
+		ArrayList<Leg> legs) {
 	
 	for(int i=0; i<waypoints.size(); i++){
 		map.addMarker(new MarkerOptions()
         .position(waypoints.get(i).centerPoint)
         .title("Waypoint")
-        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 	}
 	
+	System.out.println(legs.size());
 	for(int i=0; i<legs.size(); i++){
 		map.addPolyline(new PolylineOptions()
-	     .addAll(legs.get(i).points)
-	     .width(5)
-	     .color(Color.RED));
+		     .addAll(legs.get(i).points)
+		     .width(5)
+		     .color(Color.BLUE));
 	}
 	
 	
