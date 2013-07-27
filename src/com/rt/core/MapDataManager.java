@@ -123,6 +123,9 @@ public class MapDataManager {
 	public Waypoint getWaypoint(LatLng p)  {
 		Waypoint r = null;
 		double lastDist = 0.0f;
+		/*
+		 * 
+		 * 
 
 		for(int i = 0; i < waypoints.size(); i++) {
 			if(lastDist == 0.0f) {
@@ -138,7 +141,13 @@ public class MapDataManager {
 				r = waypoints.get(i);
 			}
 		}
-
+		*/
+		for(int i=0; i<waypoints.size(); i++){
+			Waypoint temp = waypoints.get(i);
+			if(temp.centerPoint.equals(p)){
+				return temp;
+			}
+		}
 		return r;
 	}
 

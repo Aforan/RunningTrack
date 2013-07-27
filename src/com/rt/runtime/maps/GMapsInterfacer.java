@@ -168,12 +168,15 @@ public class GMapsInterfacer {
 		
 		// Sensor enabled
 		String sensor = "sensor=true";
+		
+		String mode = "mode=walking";
  
 		log("Sensor: " + sensor);
 		// Building the parameters to the web service
-		String parameters = str_origin+"&"+str_dest+"&"+sensor;
+		String parameters = str_origin+"&"+str_dest+"&"+sensor+"&"+mode;
  
 		log("Parameters: " + parameters);
+		
 		// Output format
 		String output = "json";
  
