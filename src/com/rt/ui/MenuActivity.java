@@ -1,5 +1,6 @@
 package com.rt.ui;
 import com.rt.R;
+import com.rt.test.TestDriver;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,6 +15,8 @@ public class MenuActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+		TestDriver.runTests();
+		
 		//Set up click listeners for all the buttons
 		View runButton = findViewById(R.id.run_button);
 		runButton.setOnClickListener(this);
@@ -32,7 +35,25 @@ public class MenuActivity extends Activity implements OnClickListener {
 	}
 	
 	public void onClick(View v) {
+		
+		if(v.getId() == R.id.run_button) {
+			Intent i = new Intent(this, RunningActivity.class);
+			startActivity(i);
+		} else if(v.getId() == R.id.plan_button) {
+			Intent x = new Intent(this, PlanningActivity.class);
+			startActivity(x);
+		} else if(v.getId() == R.id.statistics_button) {
+			Intent y = new Intent(this, StatisticsActivity.class);
+			startActivity(y);
+		} else if(v.getId() == R.id.help_button) {
+			Intent z = new Intent(this, HelpActivity.class);
+			startActivity(z);
+		}
+		
+		
+	/*	
 		switch(v.getId()) {
+		
 		case R.id.run_button:
 			Intent i = new Intent(this, RunningActivity.class);
 			startActivity(i);
@@ -51,7 +72,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 			startActivity(z);
 			
 		}
-		
+*/		
 	}
 
 	@Override

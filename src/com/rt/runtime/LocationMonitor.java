@@ -115,7 +115,7 @@ public class LocationMonitor extends RunnableInterface{
 
 					ArrayList<MapElement> tSelected = new ArrayList<MapElement>();
 					tSelected.add(currentLeg);
-					ra.updateMapElements(null, tSelected);					
+					//ra.updateMapElements(null, tSelected);					
 				}
 
 			} 

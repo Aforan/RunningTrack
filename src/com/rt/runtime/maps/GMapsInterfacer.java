@@ -6,24 +6,41 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.rt.core.Leg;
 import com.rt.core.Waypoint;
 
-public class GMapsInterfacer{
+import static com.rt.test.TestDriver.log;
+
+public class GMapsInterfacer {
 	
 	//SAXParserFactory parseFactory; 
 	//parseFactory.newSAXParser();
 	
 	//Leg not void
 	public static Leg getPath(Waypoint start, Waypoint end){
-		System.out.println("Fuuuuck");
+		log("Attempting to get the directions url");
+		
 		String url = getDirectionsUrl(start.centerPoint, end.centerPoint);
+		
+		log("Obtained directions url: " + url);
 		String response;
+		
 		try {
-			response = query(url);
+			log("Attempting to get response");
+			//response = query(url);
+			
+			GMapsParser gmp = new GMapsParser(url);
+			Thread t = new Thread(gmp);
+			t.start();
+			
+			response = gmp.getResponse();			
+		
+			log("Got Response: " + response);
 			JSONObject r = new JSONObject(response);
 			ArrayList<LatLng> list = constructMapData(r);
 
@@ -32,6 +49,7 @@ public class GMapsInterfacer{
 			Leg l = new Leg(start, end, list);
 			return l;
 		} catch(Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -43,18 +61,21 @@ public class GMapsInterfacer{
         HttpURLConnection urlConnection = null;
         try{
             URL url = new URL(strUrl);
- 
+            log("Attempting to open connection");
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
- 
+            if(urlConnection == null) log("urlConnection was null");
+            else log("urlConnection was not null");
+            
+            log("Opened connection, trying to connect");
             // Connecting to url
             urlConnection.connect();
- 
+            log("Connected, attempting to get input stream");
             // Reading data from url
             iStream = urlConnection.getInputStream();
- 
+            log("Got input stream, attempting to read stream");
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
- 
+            
             StringBuffer sb = new StringBuffer();
  
             String line = "";
@@ -67,10 +88,11 @@ public class GMapsInterfacer{
             br.close();
  
         }catch(Exception e){
+        	e.printStackTrace();
         	throw new Exception("Exception while fetching url");
         }finally{
-            iStream.close();
-            urlConnection.disconnect();
+        	if(iStream != null) iStream.close();
+            if(urlConnection != null) urlConnection.disconnect();
         }
         return data;		
 	}
@@ -84,17 +106,17 @@ public class GMapsInterfacer{
 
 			/** Traversing all routes */
 			for(int i = 0; i < jRoutes.length(); i++){
-				JSONArray op = ((JSONObject)jRoutes.get(i)).getJSONArray("overview_polyline");
+				JSONObject op = ((JSONObject)jRoutes.get(i)).getJSONObject("overview_polyline");
 
 				if(op.length() > 0) {                
 					String polyline = "";
-					polyline = (String)(((JSONObject)op.get(0)).get("points"));
+					polyline = (String)op.get("points");
 
 					list.addAll(decodePoly(polyline));
 				}
 			}
 		} catch(Exception e) {
-
+			e.printStackTrace();
 		}
 
 		return list;
@@ -137,22 +159,66 @@ public class GMapsInterfacer{
 	private static String getDirectionsUrl(LatLng origin, LatLng dest){
 		// Origin of route
 		String str_origin = "origin="+origin.latitude+","+origin.longitude;
- 
+		
+		log("Origin: " + str_origin);
+		
 		// Destination of route
 		String str_dest = "destination="+dest.latitude+","+dest.longitude;
- 
+		log("Destination: " + str_dest);
+		
 		// Sensor enabled
 		String sensor = "sensor=true";
  
+		log("Sensor: " + sensor);
 		// Building the parameters to the web service
 		String parameters = str_origin+"&"+str_dest+"&"+sensor;
  
+		log("Parameters: " + parameters);
 		// Output format
 		String output = "json";
  
+		log("Output: " + output);
 		// Building the url to the web service
 		String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-		System.out.println("printing " + url);
+		
 		return url;
+	}
+	
+	private static class GMapsParser implements Runnable {
+		
+		private String url;
+		private String response;
+		private boolean done;
+		
+		public GMapsParser(String url) {
+			this.url = url;
+			done = false;
+			response = "";
+		}
+		
+		@Override
+		public void run() {
+			try {
+				response = query(url);
+				done = true;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				done = true;
+			}
+		}
+		
+		public String getResponse() {
+			while(!done) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			return response;
+		}
 	}
 }
