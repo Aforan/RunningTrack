@@ -48,7 +48,8 @@
         </activity>
         <activity
             android:name="com.rt.ui.HelpActivity"
-            android:label="@string/title_activity_help" >
+            android:label="@string/title_activity_help" 
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name="com.rt.ui.AbstractRuntimeActivity"
@@ -57,12 +58,14 @@
         <activity
             android:name="com.rt.ui.PlanningActivity"
             android:label="@string/title_activity_planning" 
-            android:configChanges="screenSize|orientation">
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name="com.rt.ui.RunningActivity"
             android:label="@string/title_activity_running"
-            android:configChanges="screenSize|orientation">
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name="com.rt.ui.PlanChoosingActivity"
@@ -71,7 +74,7 @@
         
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDiKxhVwNKJHi98ZCUa21rE6Zk2NBH-6zE" />
+            android:value="KEY HERE" />
         
     </application>
 

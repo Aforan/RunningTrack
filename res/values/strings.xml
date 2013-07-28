@@ -10,10 +10,10 @@
     <string name="help_label">Help</string>
     <string name="title_activity_statistics">Statistics</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_help">Help</string>
     <string name="title_activity_abstract_runtime">AbstractRuntimeActivity</string>
-    <string name="title_activity_planning">PlanningActivity</string>
-    <string name="title_activity_running">RunningActivity</string>
+    <string name="title_activity_planning">Planning Mode</string>
+    <string name="title_activity_running">Running Mode</string>
     <string name="title_activity_plan_choosing">PlanChoosingActivity</string>
     <string name="place_way">Place Waypoints</string>
     <string name="del_way">Delete Waypoints</string>
@@ -23,5 +23,19 @@
     <string name="past_stat_intro">Past Run Statistics</string>
     <string name="pause_resume">Pause/Resume</string>
     <string name="stop_run">Stop Run</string>
+    <string name ="help_info">
+<b>What is this app used for?</b>\n
+Running Track can be used in a variety of ways. Its primary purpose is to help you plan a running route, and it can track your current location through GPS to help you follow that route.\n\n
+<b>How do I plan a route?</b>\n
+Click Plan from the Main Menu. You then can click the screen to place waypoints. These can be seen as important milestones in your run, such as the start and end location.\n
+After you have placed your waypoints, you then select pairs of two to connect them. You select waypoints by clicking the waypoint, which highlights it as blue. You must select two waypoints, then click \"Connect Waypoints\" to have a path be drawn between those points. This path will follow sidewalks and crossings. Continue to do this to construct your entire route, then hit Let\'s Run on the bottom-right for the app to begin tracking your location.\n\n
+<b>My location isn\'t shown.</b>\n
+Running Track determines your location through the GPS (Global Positioning Service) on your device, or through your data connection. GPS will be the most accurate of any location service. Please ensure that you have at least one of these services, preferably GPS, turned on.\n\n
+<b>What do the colors in Running mode mean?</b>\n
+Red - The leg of your route that you are currently closest to.\n\n
+Blue - The rest of the route besides the active leg.\n\n
+Yellow - The path that you have ran.\n\n
+Blue circle - The inner blue circle is the center point of where the app thinks you are. The faded blue circle is all the places that you could possibly be as well.
+</string>
 
 </resources>

@@ -9,6 +9,7 @@ import com.rt.core.MapDataManager;
 import com.rt.core.Waypoint;
 import com.rt.runtime.Event;
 import com.rt.runtime.LocationMonitor;
+import com.rt.runtime.MetricsAggregator;
 
 import android.os.Bundle;
 import android.view.View;
@@ -245,6 +246,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 	//Stop button
 	public void stopRun(View view){
 		lm.addEvent(new Event(LocationMonitor.KILL_EVENT, new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())));
+		MetricsAggregator.writeMetric(lm.distanceRan, lm.totalTime, this);  
 		Intent y = new Intent(this, StatisticsActivity.class);
 		startActivity(y);
 	}

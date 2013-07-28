@@ -4,6 +4,7 @@ package com.rt.ui;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+
 import com.rt.R;
 import com.rt.core.Leg;
 import com.rt.core.MapDataManager;
