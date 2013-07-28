@@ -245,14 +245,14 @@ public class MapDataManager {
 
 
 	public static double distance(LatLng a, LatLng b) {
-		float[] res = new float[2];
-
-		Location.distanceBetween(	a.latitude,
-									a.longitude,
-									b.latitude,
-									b.longitude,
-									res);
-
-		return res[0];
+		Location la = new Location("A");
+		la.setLatitude(a.latitude);
+		la.setLongitude(a.longitude);
+		
+		Location lb = new Location("B");
+		lb.setLatitude(b.latitude);
+		lb.setLongitude(b.longitude);
+		
+		return Math.abs(la.distanceTo(lb));
 	}
 }
