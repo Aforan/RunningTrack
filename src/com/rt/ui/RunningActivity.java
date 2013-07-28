@@ -112,6 +112,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			lock.acquire();
 			//If we need a Refresh
 			if(needRefresh) {
+				needRefresh = false;
 				//And the leg has actually changed
 				if(lastLeg != selectedLeg) {
 					//Create our new selected leg
@@ -129,8 +130,11 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 					}
 				}
 			}
-			lock.release();
+			
 		} catch (InterruptedException e) {}
+		finally {
+			lock.release();
+		}
 	}
 
 	@Override
@@ -187,10 +191,12 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			lastLeg = selectedLeg;
 			selectedLeg = l;
 			needRefresh = true;
-			lock.release();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			lock.release();
 		}
 	}
 }
