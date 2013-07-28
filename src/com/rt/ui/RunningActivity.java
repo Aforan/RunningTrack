@@ -10,6 +10,8 @@ import com.rt.runtime.Event;
 import com.rt.runtime.LocationMonitor;
 
 import android.os.Bundle;
+import android.view.View;
+
 import com.rt.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import android.location.Location;
+import android.content.Intent;
 import android.graphics.Color;
 
 import static com.rt.test.TestDriver.log;
@@ -50,6 +53,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 	private Leg lastLeg;
 	private ArrayList<Polyline> lines;
 	private boolean needRefresh;
+	boolean paused;
 
 	private static final LocationRequest REQUEST = LocationRequest.create()
 			.setInterval(5000) // 5 seconds
@@ -68,6 +72,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 		Thread t = new Thread(lm);
 		t.start();
 		needRefresh = false;
+		paused = false;
 
 		lines = new ArrayList<Polyline>();
 		setContentView(R.layout.activity_running);
@@ -106,14 +111,18 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 	public void onLocationChanged(Location location) {
 		System.out.println("Location changed called");
 		// Tracing of user
-		map.addPolyline(new PolylineOptions()
+		if(!paused){
+			map.addPolyline(new PolylineOptions()
 				.add(new LatLng(location.getLatitude(), location.getLongitude()),
 						new LatLng(currentLoc.getLatitude(), currentLoc
 								.getLongitude())).width(5).color(Color.YELLOW));
-
+		
+		}
+		
 		currentLoc = location;
+		
 		lm.addEvent(new Event(LocationMonitor.UPDATE_POS, new LatLng(location.getLatitude(), location.getLongitude())));
-
+		
 		try {
 			lock.acquire();
 			//If we need a Refresh
@@ -230,4 +239,19 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			lock.release();
 		}
 	}
+	
+	//Stop button
+	public void stopRun(View view){
+		lm.addEvent(new Event(LocationMonitor.KILL_EVENT, new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())));
+		Intent y = new Intent(this, StatisticsActivity.class);
+		startActivity(y);
+	}
+	
+	//Pause/Resume button
+	public void pauseOrResumeRun(View view){
+		lm.addEvent(new Event(LocationMonitor.PAUSE_EVENT, new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())));
+		
+		paused = !paused;
+	}
+		
 }
