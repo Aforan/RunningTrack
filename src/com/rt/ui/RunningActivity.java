@@ -117,7 +117,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			if(needRefresh) {
 				needRefresh = false;
 				//And the leg has actually changed
-				if(lastLeg != selectedLeg && lastLeg != null && selectedLeg != null) {
+				if(lastLeg != selectedLeg && selectedLeg != null) {
 					//Create our new selected leg
 					Polyline tempLine = map.addPolyline(new PolylineOptions()
 				     .addAll((selectedLeg.points))
@@ -196,7 +196,6 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			lastLeg = selectedLeg;
 			selectedLeg = l;
 			needRefresh = true;
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
