@@ -61,7 +61,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 		if(mdm == null){
 			mdm = new MapDataManager();
 		}
-		lock = new Semaphore(0);
+		lock = new Semaphore(1);
 		lm = new LocationMonitor(this, mdm);
 		Thread t = new Thread(lm);
 		t.start();
@@ -109,7 +109,6 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 								.getLongitude())).width(5).color(Color.YELLOW));
 
 		currentLoc = location;
-		
 		lm.addEvent(new Event(LocationMonitor.UPDATE_POS, new LatLng(location.getLatitude(), location.getLongitude())));
 	
 		try {
@@ -135,8 +134,9 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 				}
 			}
 			
-		} catch (InterruptedException e) {}
-		finally {
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			lock.release();
 		}
 	}
@@ -197,7 +197,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			selectedLeg = l;
 			needRefresh = true;
 			
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
