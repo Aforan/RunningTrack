@@ -1,6 +1,7 @@
 package com.rt.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import com.rt.core.Leg;
@@ -11,6 +12,7 @@ import com.rt.runtime.LocationMonitor;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.rt.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -147,13 +149,13 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 						Polyline thisLine = lines.get(i);
 
 						//Find the match for the last leg that was selected
-						if(!lastFound && lastLeg.points.equals(thisLine.getPoints())){
+						if(!lastFound && lastLeg != null && (lastLeg.points).equals(thisLine.getPoints())){
 							log("Found last lg, reset color to blue");
 							thisLine.setColor(Color.BLUE);
 							lastFound = true;
 						}
 						//Find the match for the newly selected leg
-						if(!selectedFound && selectedLeg.points.equals(thisLine.getPoints())){
+						if(!selectedFound && selectedLeg != null && selectedLeg.points.equals(thisLine.getPoints())){
 							log("Found current leg reset color to red");
 							thisLine.setColor(Color.RED);
 							selectedFound = true;
@@ -252,6 +254,16 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 		lm.addEvent(new Event(LocationMonitor.PAUSE_EVENT, new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())));
 		
 		paused = !paused;
+		
+		if(paused){
+			Toast toast = Toast.makeText(getApplicationContext(), "Paused Run", Toast.LENGTH_SHORT);
+			toast.show();
+		}
+		
+		else {
+			Toast toast = Toast.makeText(getApplicationContext(), "Resumed Run", Toast.LENGTH_SHORT);
+			toast.show();
+		}
 	}
 		
 }
