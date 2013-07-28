@@ -227,19 +227,12 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 			//A matching leg has been found within a reasonable distance of the click
 			if(possibleLeg != null){
 				
-				//Use the points stored in leg to recreate a similar polyline, then compare it to stored polylines
-				Polyline tempLine = map.addPolyline(new PolylineOptions()
-			     .addAll((possibleLeg.points))
-			     .width(5)
-			     .color(Color.RED));
-				
-				//Find it, remove it.
 				for(int i=0; i<lines.size(); i++){
-					if(lines.get(i).equals(tempLine)){
+					if(lines.get(i).getPoints().equals(possibleLeg.points)){
+						System.out.println("Found a match.");
+						Polyline tempLine = lines.get(i);
 						tempLine.remove();
-						lines.get(i).remove();
 						lines.remove(i);
-						mdm.removeLeg(possibleLeg);
 						break;
 					}
 				}
@@ -261,7 +254,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 		if(firstMarkerSelected == null)
 			second = false;
 		else
-			second = marker.equals(firstMarkerSelected);
+			second = marker.equals(secondMarkerSelected);
 
 		
 		
@@ -371,6 +364,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	//Don't do anything for right now
 	public void connectWaypoints(View view){
 		
+		System.out.println();
 		//If there are two markers that can be connected
 		if(firstMarkerSelected != null && secondMarkerSelected != null){
 			
@@ -379,15 +373,23 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 			LatLng secondPos = secondMarkerSelected.getPosition();
 					
 			Leg leg = GMapsInterfacer.getPath(mdm.getWaypoint(firstPos), mdm.getWaypoint(secondPos));
-			mdm.addLeg(leg);
-			Toast toast = Toast.makeText(getApplicationContext(), "Drawing connecting route...", Toast.LENGTH_SHORT);
-			toast.show();
 			
-			//POLYLINE FOR PATH
-			lines.add(map.addPolyline(new PolylineOptions()
-		     .addAll((leg.points))
-		     .width(5)
-		     .color(Color.BLUE)));
+			if(leg == null){
+				Toast toast = Toast.makeText(getApplicationContext(), "Could not draw route. Do you have a WiFi connection currently?", Toast.LENGTH_LONG);
+				toast.show();
+			}
+			
+			else {
+				mdm.addLeg(leg);
+				Toast toast = Toast.makeText(getApplicationContext(), "Drawing connecting route...", Toast.LENGTH_SHORT);
+				toast.show();
+				
+				//POLYLINE FOR PATH
+				lines.add(map.addPolyline(new PolylineOptions()
+			     .addAll((leg.points))
+			     .width(5)
+			     .color(Color.BLUE)));
+			}
 			
 			
 
