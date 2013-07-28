@@ -1,85 +1,74 @@
 package com.rt.runtime;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Calendar;
 
-import android.os.*;
-import android.util.*;
+import android.app.Activity;
+import android.content.Context;
 
 public class MetricsAggregator{
 	
-	public void buildMetrics() throws IOException{
+	public static ArrayList<Metric> buildMetrics(Activity caller) {
 		
-		File temp = new File("temp.dat");
+		ArrayList<Metric> mets;
+		mets = new ArrayList<Metric>();
 		
-		//Grabs file from SD card 
-		File file = new File(Environment.getExternalStorageDirectory(), "metric.dat");
-		
-		//Check to see if file exist.
-		if(!file.exists()){
+		try {
+			FileInputStream fis = caller.openFileInput("metric.dat");
 			
-			//Create the file
-			File metric = new File("metric.dat");
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			
-			//Probably don't have to do this but i did it anyways
-			copy(file, metric);
+			while(true) {
+				String line = br.readLine();
+				
+				if(line == null) break;
+				if(line.charAt(0) == '#') continue;
+				
+				String[] splitLine = line.split(",");
+				
+				if(splitLine.length == 3) {
+					String dateString = splitLine[0];
+					String timeString = splitLine[1];
+					String distString = splitLine[2];
+					
+					Metric newMet = new Metric(Double.parseDouble(distString), dateString, Double.parseDouble(timeString));
+					mets.add(newMet);
+				}
+			}
+			
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		//File exist  
-		else{
-			//Copy file
-			copy(file,temp);
-		}
-		
+		return mets;
+	}
+	
+	public static void writeMetric(double distance, double time, Activity caller){
 		//Writing new data to the file 
 		try{
-			
 			Calendar c = Calendar.getInstance();
 			
 			//Need to know who to call the metric class 
-			String date = ("date: " + c.MONTH + c.DAY_OF_MONTH + c.YEAR + " " );
-			String time = ("Time: " + /*Time gets here */ " ");
-			String distance = ("Distance: " + /*whatever the distance is*/ "\n ");
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(date);
-			sb.append(time);
-			sb.append(distance);
+			String dateStr = (c.get(Calendar.MONTH) + "/" + c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR));
+			String timeStr = ("" + time);
+			String distanceStr = ("" + distance);
 			
-			String data = sb.toString();
-			
-			FileWriter fw = new FileWriter(temp.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			
-			//THis is where we add what need to be written 
-			bw.write(data);
-			bw.close();
-		}
-		
-		catch (IOException e){
-			e.printStackTrace();
-		}
-	}
+			String line = dateStr + "," + timeStr + "," + distanceStr + "\n";
 	
-	//Copies the file 
-	public static void copy(File src, File dst) throws IOException{
-		
-		InputStream in = new FileInputStream(src);
-		OutputStream out = new FileOutputStream(dst);
-		
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = in.read(buffer))>0){
-			out.write(buffer, 0, length);
-		}
-		
-		in.close();
-		out.close();
-	}
-
-	public static void write(File src, metric data){
-		
+			//THis is where we add what need to be written 
+			
+			FileOutputStream fos = caller.openFileOutput("metric.dat", Context.MODE_APPEND);
+			fos.write(line.getBytes());
+			fos.close();
+		} catch (IOException e){
+			e.printStackTrace();
+		}		
 	}
 	
 }

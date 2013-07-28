@@ -20,5 +20,6 @@
     <string name="connect_waypoints">Connect Waypoints</string>
     <string name="deselect_all">Deselect All</string>
     <string name="lets_run">Let\'s Run!</string>
+    <string name="past_stat_intro">Past Run Statistics</string>
 
 </resources>

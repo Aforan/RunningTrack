@@ -15,7 +15,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
-		TestDriver.runTests();
+		TestDriver.metricTests(this);
 		
 		//Set up click listeners for all the buttons
 		View runButton = findViewById(R.id.run_button);
