@@ -188,7 +188,7 @@ containing a value of this type.
         public static final int running=0x7f020019;
     }
     public static final class id {
-        public static final int action_settings=0x7f05000f;
+        public static final int action_settings=0x7f050010;
         public static final int connect_wp_button=0x7f05000a;
         public static final int del_waypoints=0x7f05000d;
         public static final int deselect_wps_button=0x7f05000b;
@@ -202,6 +202,7 @@ containing a value of this type.
         public static final int plan_button=0x7f050007;
         public static final int run_button=0x7f050006;
         public static final int satellite=0x7f050002;
+        public static final int stat_table=0x7f05000f;
         public static final int statistics_button=0x7f050008;
         public static final int terrain=0x7f050003;
     }
@@ -311,6 +312,7 @@ containing a value of this type.
         public static final int help_label=0x7f06001b;
         public static final int lets_run=0x7f060027;
         public static final int main_title=0x7f060017;
+        public static final int past_stat_intro=0x7f060028;
         public static final int place_way=0x7f060023;
         public static final int plan_label=0x7f060019;
         public static final int run_label=0x7f060018;
