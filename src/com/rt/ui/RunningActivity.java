@@ -102,6 +102,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 
 	@Override
 	public void onLocationChanged(Location location) {
+		System.out.println("Location changed called");
 		// Tracing of user
 		map.addPolyline(new PolylineOptions()
 				.add(new LatLng(location.getLatitude(), location.getLongitude()),
@@ -118,19 +119,33 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 				needRefresh = false;
 				//And the leg has actually changed
 				if(lastLeg != selectedLeg && lastLeg != null && selectedLeg != null) {
-					//Create our new selected leg
-					Polyline tempLine = map.addPolyline(new PolylineOptions()
-				     .addAll((selectedLeg.points))
-				     .width(5)
-				     .color(Color.RED));
 					
-					//Find its' corresponding leg and remove it
+					boolean lastFound = false;
+					boolean selectedFound = false;
+					//Find both legs
 					for(int i=0; i<lines.size(); i++){
-						if(lines.get(i).equals(tempLine)){
-							lines.get(i).remove();
+						
+						if(selectedFound && lastFound)
 							break;
+						
+						Polyline thisLine = lines.get(i);
+						
+						//Find the match for the last leg that was selected
+						if(!lastFound && lastLeg.points.equals(thisLine.getPoints())){
+							thisLine.setColor(Color.BLUE);
+							lastFound = true;
+						}
+						//Find the match for the newly selected leg
+						if(!selectedFound && selectedLeg.points.equals(thisLine.getPoints())){
+							thisLine.setColor(Color.RED);
+							selectedFound = true;
 						}
 					}
+					
+					if(lastFound)
+						System.out.println("Last leg was matched");
+					if(selectedFound)
+						System.out.println("Selected leg was matched");
 				}
 			}
 			
