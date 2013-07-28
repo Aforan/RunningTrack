@@ -100,10 +100,11 @@ public class LocationMonitor extends RunnableInterface{
 
 	private void updateCurrentLeg() {
 		Leg onLeg = mdm.getLeg(currentPos);
-		currentLeg = onLeg;
 		
 		if(onLeg != null && onLeg != currentLeg) {
 			ra.updateCurrentLeg(onLeg);				
 		}
+		
+		currentLeg = onLeg;
 	}
 }
