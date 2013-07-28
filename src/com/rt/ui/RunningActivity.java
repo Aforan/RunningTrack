@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import android.location.Location;
 import android.graphics.Color;
 
+import static com.rt.test.TestDriver.log;
+
 
 //TODO:	Should see if there is an onPause method or something like that
 //		So that we can pause the LM.
@@ -116,7 +118,12 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 			lock.acquire();
 			//If we need a Refresh
 			if(needRefresh) {
+				log("Needed refresh");
 				needRefresh = false;
+				
+				log("lastLeg is " + (lastLeg == null ? "null" : "not null"));
+				log("selectedLeg is " + (selectedLeg == null ? "null" : "not null"));
+				
 				//And the leg has actually changed
 				if(lastLeg != selectedLeg && selectedLeg != null) {
 
@@ -132,11 +139,13 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 
 						//Find the match for the last leg that was selected
 						if(!lastFound && lastLeg.points.equals(thisLine.getPoints())){
+							log("Found last lg, reset color to blue");
 							thisLine.setColor(Color.BLUE);
 							lastFound = true;
 						}
 						//Find the match for the newly selected leg
 						if(!selectedFound && selectedLeg.points.equals(thisLine.getPoints())){
+							log("Found current leg reset color to red");
 							thisLine.setColor(Color.RED);
 							selectedFound = true;
 						}
@@ -207,11 +216,13 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 
 	public void updateCurrentLeg(Leg l) {
 		try {
+			log("Acquiring lock for updateLeg");
 			lock.acquire();
+			log("Lock Acquired leg is " + (l == null ? "null" : "Not null"));
 			lastLeg = selectedLeg;
 			selectedLeg = l;
 			needRefresh = true;
-
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
