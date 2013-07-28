@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 import com.rt.core.Leg;
+import com.rt.core.MapDataManager;
 import com.rt.core.Waypoint;
 import com.rt.runtime.Event;
 import com.rt.runtime.LocationMonitor;
@@ -57,6 +58,9 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		if(mdm == null){
+			mdm = new MapDataManager();
+		}
 		lock = new Semaphore(0);
 		lm = new LocationMonitor(this, mdm);
 		Thread t = new Thread(lm);
@@ -166,6 +170,7 @@ public class RunningActivity extends AbstractRuntimeActivity implements
 	@Override
 	public void recreateMap(ArrayList<Waypoint> waypoints, ArrayList<Leg> legs) {
 		
+		System.out.println(waypoints.size());
 		for (int i = 0; i < waypoints.size(); i++) {
 			map.addMarker(new MarkerOptions()
 					.position(waypoints.get(i).centerPoint)
